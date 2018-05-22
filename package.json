@@ -1,0 +1,27 @@
+{
+  "name": "webthing-thingy52",
+  "version": "0.1.0",
+  "description": "webthing-thingy52 =================",
+  "main": "server.js",
+  "dependencies": {
+    "color": "^3.0.0",
+    "thingy52": "^1.0.4",
+    "uuid": "^3.2.1",
+    "webthing": "^0.5.3"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hobinjk/webthing-thingy52.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/hobinjk/webthing-thingy52/issues"
+  },
+  "homepage": "https://github.com/hobinjk/webthing-thingy52#readme"
+}
