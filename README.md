@@ -7,3 +7,12 @@ the Thingy:52 as a Web Thing.
 
 I broke luminosity/color during the changes for the newest webthing-node API so
 it needs a few updates.
+
+Running
+-------
+```
+npm install
+node server.js
+```
+Half the time it refuses to connect and can be encouraged by restarting the
+thingy:52 while simultaneously restarting the script.
