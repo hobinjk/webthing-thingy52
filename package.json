@@ -6,10 +6,12 @@
   "dependencies": {
     "color": "^3.0.0",
     "thingy52": "^1.0.4",
-    "uuid": "^3.2.1",
-    "webthing": "^0.5.3"
+    "webthing": "^0.6.1"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "babel-eslint": "^8.2.3",
+    "eslint": "^4.19.1"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js"
