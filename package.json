@@ -1,12 +1,12 @@
 {
   "name": "webthing-thingy52",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "webthing-thingy52 =================",
   "main": "server.js",
   "dependencies": {
     "color": "^3.0.0",
     "thingy52": "^1.0.4",
-    "webthing": "^0.6.1"
+    "webthing": "^0.6.2"
   },
   "devDependencies": {
     "babel-eslint": "^8.2.3",
