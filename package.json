@@ -9,7 +9,7 @@
     "webthing": "^0.6.2"
   },
   "devDependencies": {
-    "babel-eslint": "^8.2.3",
+    "babel-eslint": "^8.2.5",
     "eslint": "^4.19.1"
   },
   "scripts": {
