@@ -6,10 +6,10 @@
   "dependencies": {
     "color": "^3.0.0",
     "thingy52": "^1.0.4",
-    "webthing": "^0.6.2"
+    "webthing": "^0.7.0"
   },
   "devDependencies": {
-    "babel-eslint": "^8.2.5",
+    "babel-eslint": "^8.2.6",
     "eslint": "^4.19.1"
   },
   "scripts": {
