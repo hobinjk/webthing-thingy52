@@ -24,13 +24,17 @@ class ButtonEvent extends Event {
 }
 
 function run_server(thingy) {
-  console.log('Discovered:', thingy);
+  console.log('Discovered:', thingy.address);
 
   thingy.on('disconnect', () => {
     console.log('Disconnected!');
   });
 
-  const thing = new Thing('thingy52', 'thing', 'A WoT-connected Thingy:52');
+  const thing = new Thing(
+    'thingy52',
+    ['ColorControl'],
+    'A WoT-connected Thingy:52'
+  );
 
   const temperatureProperty = new Property(
     thing,
@@ -39,6 +43,7 @@ function run_server(thingy) {
     {
       type: 'number',
       unit: 'celsius',
+      label: 'Temperature',
       description: 'An ambient temperature sensor',
     });
   thing.addProperty(temperatureProperty);
@@ -49,6 +54,7 @@ function run_server(thingy) {
     new Value(0),
     {
       type: 'number',
+      label: 'Pressure',
       unit: 'hectopascal',
     });
   thing.addProperty(pressureProperty);
@@ -59,18 +65,34 @@ function run_server(thingy) {
     new Value(0),
     {
       type: 'number',
+      label: 'Humidity',
       unit: 'percent',
     });
   thing.addProperty(humidityProperty);
 
-  const gasProperty = new Property(
+  const eco2Property = new Property(
     thing,
-    'gas',
-    new Value({}),
+    'eco2',
+    new Value(0),
     {
-      type: 'object',
+      type: 'number',
+      unit: 'ppm',
+      label: 'ECO2',
+      description: 'Effective CO2',
     });
-  thing.addProperty(gasProperty);
+  thing.addProperty(eco2Property);
+
+  const tvocProperty = new Property(
+    thing,
+    'tvoc',
+    new Value(0),
+    {
+      type: 'number',
+      unit: 'ppb',
+      label: 'TVOC',
+      description: 'Total volatile organic compound',
+    });
+  thing.addProperty(tvocProperty);
 
   const luminosityProperty = new Property(
     thing,
@@ -79,6 +101,7 @@ function run_server(thingy) {
     {
       type: 'number',
       unit: 'lux',
+      label: 'Luminosity',
     });
   thing.addProperty(luminosityProperty);
 
@@ -89,23 +112,16 @@ function run_server(thingy) {
     {
       type: 'number',
       unit: 'percent',
+      label: 'Battery',
     });
   thing.addProperty(batteryLevelProperty);
-
-  const colorProperty = new Property(
-    thing,
-    'color',
-    new Value('#0000FF'),
-    {
-      type: 'string',
-    });
-  thing.addProperty(colorProperty);
 
   const ledColorProperty = new Property(
     thing,
     'ledColor',
     new Value('#0000FF', (value) => {
       const color = Color(value);
+      console.log('trying to set color:', value, color);
       thingy.led_set(color.object(), (error) => {
         if (error) {
           console.log('Failed to set LED color:', error);
@@ -113,7 +129,9 @@ function run_server(thingy) {
       });
     }),
     {
+      '@type': 'ColorProperty',
       type: 'string',
+      label: 'Color',
     });
   thing.addProperty(ledColorProperty);
 
@@ -135,7 +153,8 @@ function run_server(thingy) {
       humidityProperty.value.notifyOfExternalUpdate(value);
     });
     thingy.on('gasNotif', (value) => {
-      gasProperty.value.notifyOfExternalUpdate(value);
+      eco2Property.value.notifyOfExternalUpdate(value.eco2);
+      tvocProperty.value.notifyOfExternalUpdate(value.tvoc);
     });
     thingy.on('colorNotif', (value) => {
       // eslint-disable-next-line max-len
@@ -162,7 +181,7 @@ function run_server(thingy) {
         b: blue.toFixed(0),
       });
 
-      colorProperty.value.notifyOfExternalUpdate(color.hex());
+      ledColorProperty.value.notifyOfExternalUpdate(color.hex());
       luminosityProperty.value.notifyOfExternalUpdate(value.clear);
     });
     thingy.on('batteryLevelChange', (value) => {
@@ -189,7 +208,7 @@ function run_server(thingy) {
     });
     thingy.color_interval_set(1000, (error) => {
       if (error) {
-        console.log('Failed to configure color sensor:': error);
+        console.log('Failed to configure color sensor:', error);
       }
     });
     thingy.gas_mode_set(1, (error) => {
