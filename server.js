@@ -5,7 +5,6 @@
  */
 
 const {
-  Event,
   Property,
   SingleThing,
   Thing,
@@ -17,12 +16,6 @@ const Color = require('color');
 
 console.log('Scanning for Thingy:52');
 
-class ButtonEvent extends Event {
-  constructor(thing, state) {
-    super(thing, `button${state}`);
-  }
-}
-
 function run_server(thingy) {
   console.log('Discovered:', thingy.address);
 
@@ -31,8 +24,8 @@ function run_server(thingy) {
   });
 
   const thing = new Thing(
-    'thingy52',
-    ['ColorControl'],
+    'thingy:52',
+    ['ColorControl', 'PushButton'],
     'A WoT-connected Thingy:52'
   );
 
@@ -45,6 +38,7 @@ function run_server(thingy) {
       unit: 'celsius',
       label: 'Temperature',
       description: 'An ambient temperature sensor',
+      readOnly: true,
     });
   thing.addProperty(temperatureProperty);
 
@@ -56,6 +50,7 @@ function run_server(thingy) {
       type: 'number',
       label: 'Pressure',
       unit: 'hectopascal',
+      readOnly: true,
     });
   thing.addProperty(pressureProperty);
 
@@ -67,6 +62,7 @@ function run_server(thingy) {
       type: 'number',
       label: 'Humidity',
       unit: 'percent',
+      readOnly: true,
     });
   thing.addProperty(humidityProperty);
 
@@ -79,6 +75,7 @@ function run_server(thingy) {
       unit: 'ppm',
       label: 'ECO2',
       description: 'Effective CO2',
+      readOnly: true,
     });
   thing.addProperty(eco2Property);
 
@@ -91,6 +88,7 @@ function run_server(thingy) {
       unit: 'ppb',
       label: 'TVOC',
       description: 'Total volatile organic compound',
+      readOnly: true,
     });
   thing.addProperty(tvocProperty);
 
@@ -102,6 +100,7 @@ function run_server(thingy) {
       type: 'number',
       unit: 'lux',
       label: 'Luminosity',
+      readOnly: true,
     });
   thing.addProperty(luminosityProperty);
 
@@ -113,6 +112,7 @@ function run_server(thingy) {
       type: 'number',
       unit: 'percent',
       label: 'Battery',
+      readOnly: true,
     });
   thing.addProperty(batteryLevelProperty);
 
@@ -134,6 +134,17 @@ function run_server(thingy) {
       label: 'Color',
     });
   thing.addProperty(ledColorProperty);
+
+  const buttonProperty = new Property(
+    thing,
+    'button',
+    new Value(false),
+    {
+      '@type': 'PushedProperty',
+      type: 'boolean',
+      label: 'Button',
+    });
+  thing.addProperty(buttonProperty);
 
   thingy.connectAndSetUp((error) => {
     if (error) {
@@ -188,7 +199,7 @@ function run_server(thingy) {
       batteryLevelProperty.value.notifyOfExternalUpdate(value);
     });
     thingy.on('buttonNotif', (state) => {
-      thing.addEvent(new ButtonEvent(thing, state));
+      buttonProperty.value.notifyOfExternalUpdate(state === 'Pressed');
     });
 
     thingy.temperature_interval_set(1000, (error) => {
@@ -254,15 +265,8 @@ function run_server(thingy) {
     });
   });
 
-  thing.addAvailableEvent('buttonPressed', {
-    description: 'Button pressed',
-  });
-  thing.addAvailableEvent('buttonReleased', {
-    description: 'Button released',
-  });
-
   const server = new WebThingServer(new SingleThing(thing), 8888);
-  server.start();
+  server.start().catch(console.error);
 }
 
 Thingy.discover(run_server);
