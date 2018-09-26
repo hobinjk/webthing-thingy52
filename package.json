@@ -6,11 +6,11 @@
   "dependencies": {
     "color": "^3.0.0",
     "thingy52": "^1.0.4",
-    "webthing": "^0.7.0"
+    "webthing": "^0.8.1"
   },
   "devDependencies": {
-    "babel-eslint": "^8.2.6",
-    "eslint": "^4.19.1"
+    "babel-eslint": "^9.0.0",
+    "eslint": "^5.6.0"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
