@@ -5,6 +5,7 @@
  */
 
 const {
+  Event,
   Property,
   SingleThing,
   Thing,
@@ -39,7 +40,8 @@ function run_server(thingy) {
       label: 'Temperature',
       description: 'An ambient temperature sensor',
       readOnly: true,
-    });
+    }
+  );
   thing.addProperty(temperatureProperty);
 
   const pressureProperty = new Property(
@@ -51,7 +53,8 @@ function run_server(thingy) {
       label: 'Pressure',
       unit: 'hectopascal',
       readOnly: true,
-    });
+    }
+  );
   thing.addProperty(pressureProperty);
 
   const humidityProperty = new Property(
@@ -63,7 +66,8 @@ function run_server(thingy) {
       label: 'Humidity',
       unit: 'percent',
       readOnly: true,
-    });
+    }
+  );
   thing.addProperty(humidityProperty);
 
   const eco2Property = new Property(
@@ -76,7 +80,8 @@ function run_server(thingy) {
       label: 'ECO2',
       description: 'Effective CO2',
       readOnly: true,
-    });
+    }
+  );
   thing.addProperty(eco2Property);
 
   const tvocProperty = new Property(
@@ -89,7 +94,8 @@ function run_server(thingy) {
       label: 'TVOC',
       description: 'Total volatile organic compound',
       readOnly: true,
-    });
+    }
+  );
   thing.addProperty(tvocProperty);
 
   const luminosityProperty = new Property(
@@ -101,7 +107,8 @@ function run_server(thingy) {
       unit: 'lux',
       label: 'Luminosity',
       readOnly: true,
-    });
+    }
+  );
   thing.addProperty(luminosityProperty);
 
   const batteryLevelProperty = new Property(
@@ -113,7 +120,8 @@ function run_server(thingy) {
       unit: 'percent',
       label: 'Battery',
       readOnly: true,
-    });
+    }
+  );
   thing.addProperty(batteryLevelProperty);
 
   const ledColorProperty = new Property(
@@ -132,7 +140,8 @@ function run_server(thingy) {
       '@type': 'ColorProperty',
       type: 'string',
       label: 'Color',
-    });
+    }
+  );
   thing.addProperty(ledColorProperty);
 
   const buttonProperty = new Property(
@@ -143,8 +152,16 @@ function run_server(thingy) {
       '@type': 'PushedProperty',
       type: 'boolean',
       label: 'Button',
-    });
+    }
+  );
   thing.addProperty(buttonProperty);
+  thing.addAvailableEvent(
+    'pressed',
+    {
+      description: 'Button pressed',
+      '@type': 'PressedEvent',
+    }
+  );
 
   thingy.connectAndSetUp((error) => {
     if (error) {
@@ -200,6 +217,7 @@ function run_server(thingy) {
     });
     thingy.on('buttonNotif', (state) => {
       buttonProperty.value.notifyOfExternalUpdate(state === 'Pressed');
+      thing.addEvent(new Event(thing, 'pressed'));
     });
 
     thingy.temperature_interval_set(1000, (error) => {

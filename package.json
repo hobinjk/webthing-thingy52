@@ -4,13 +4,13 @@
   "description": "webthing-thingy52 =================",
   "main": "server.js",
   "dependencies": {
-    "color": "^3.0.0",
+    "color": "^3.1.0",
     "thingy52": "^1.0.4",
-    "webthing": "^0.8.1"
+    "webthing": "^0.8.3"
   },
   "devDependencies": {
-    "babel-eslint": "^9.0.0",
-    "eslint": "^5.6.0"
+    "babel-eslint": "^10.0.1",
+    "eslint": "^5.7.0"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
