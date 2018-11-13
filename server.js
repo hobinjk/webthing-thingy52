@@ -36,7 +36,7 @@ function run_server(thingy) {
     new Value(0),
     {
       type: 'number',
-      unit: 'celsius',
+      unit: 'degree celsius',
       label: 'Temperature',
       description: 'An ambient temperature sensor',
       readOnly: true,
