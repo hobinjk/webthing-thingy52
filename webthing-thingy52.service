@@ -1,0 +1,20 @@
+[Unit]
+Description=webthing-thingy52 runner
+After=network.target
+
+[Service]
+Type=simple
+StandardOutput=journal
+StandardError=journal
+# Edit this line, if needed, to specify what user to run Vaani as
+# If you delete this line, it will run as root
+User=pi
+# Edit this line, if needed, to specify where you installed the server
+WorkingDirectory=/home/pi/mozilla-iot/webthing-thingy52
+# Edit this line, if needed, to set the correct path to node
+ExecStart=/home/pi/mozilla-iot/webthing-thingy52/run.sh
+Restart=always
+RestartSec=10s
+
+[Install]
+WantedBy=multi-user.target
