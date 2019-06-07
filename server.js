@@ -139,10 +139,23 @@ function run_server(thingy) {
     {
       '@type': 'ColorProperty',
       type: 'string',
-      label: 'Color',
+      label: 'LED Color',
     }
   );
   thing.addProperty(ledColorProperty);
+
+  const sensorColorProperty = new Property(
+    thing,
+    'sensorColor',
+    new Value('#000000'),
+    {
+      '@type': 'ColorProperty',
+      type: 'string',
+      label: 'Sensed Color',
+      readOnly: true,
+    }
+  );
+  thing.addProperty(sensorColorProperty);
 
   const buttonProperty = new Property(
     thing,
@@ -209,7 +222,7 @@ function run_server(thingy) {
         b: blue.toFixed(0),
       });
 
-      ledColorProperty.value.notifyOfExternalUpdate(color.hex());
+      sensorColorProperty.value.notifyOfExternalUpdate(color.hex());
       luminosityProperty.value.notifyOfExternalUpdate(value.clear);
     });
     thingy.on('batteryLevelChange', (value) => {
