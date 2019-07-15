@@ -1,19 +1,19 @@
 {
   "name": "webthing-thingy52",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "webthing-thingy52 =================",
   "main": "server.js",
   "dependencies": {
-    "color": "^3.1.0",
+    "color": "^3.1.2",
     "thingy52": "^1.0.4",
-    "webthing": "^0.8.3"
+    "webthing": "^0.12.0"
   },
   "devDependencies": {
-    "babel-eslint": "^10.0.1",
-    "eslint": "^5.7.0"
+    "babel-eslint": "^10.0.2",
+    "eslint": "^6.0.1"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint .",
     "start": "node server.js"
   },
   "repository": {
