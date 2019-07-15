@@ -25,8 +25,13 @@ function run_server(thingy) {
   });
 
   const thing = new Thing(
+    `urn:dev:thingy:52:${thingy.id}`,
     'thingy:52',
-    ['ColorControl', 'PushButton'],
+    [
+      'ColorControl',
+      'PushButton',
+      'TemperatureSensor',
+    ],
     'A WoT-connected Thingy:52'
   );
 
@@ -35,9 +40,10 @@ function run_server(thingy) {
     'temperature',
     new Value(0),
     {
+      '@type': 'TemperatureProperty',
       type: 'number',
       unit: 'degree celsius',
-      label: 'Temperature',
+      title: 'Temperature',
       description: 'An ambient temperature sensor',
       readOnly: true,
     }
@@ -50,9 +56,10 @@ function run_server(thingy) {
     new Value(0),
     {
       type: 'number',
-      label: 'Pressure',
-      unit: 'hectopascal',
+      title: 'Pressure',
+      unit: 'hPa',
       readOnly: true,
+      multipleOf: 0.01,
     }
   );
   thing.addProperty(pressureProperty);
@@ -62,8 +69,8 @@ function run_server(thingy) {
     'humidity',
     new Value(0),
     {
-      type: 'number',
-      label: 'Humidity',
+      type: 'integer',
+      title: 'Humidity',
       unit: 'percent',
       readOnly: true,
     }
@@ -75,9 +82,9 @@ function run_server(thingy) {
     'eco2',
     new Value(0),
     {
-      type: 'number',
+      type: 'integer',
       unit: 'ppm',
-      label: 'ECO2',
+      title: 'ECO2',
       description: 'Effective CO2',
       readOnly: true,
     }
@@ -89,9 +96,9 @@ function run_server(thingy) {
     'tvoc',
     new Value(0),
     {
-      type: 'number',
+      type: 'integer',
       unit: 'ppb',
-      label: 'TVOC',
+      title: 'TVOC',
       description: 'Total volatile organic compound',
       readOnly: true,
     }
@@ -103,9 +110,9 @@ function run_server(thingy) {
     'luminosity',
     new Value(0),
     {
-      type: 'number',
+      type: 'integer',
       unit: 'lux',
-      label: 'Luminosity',
+      title: 'Luminosity',
       readOnly: true,
     }
   );
@@ -116,9 +123,9 @@ function run_server(thingy) {
     'battery',
     new Value(0),
     {
-      type: 'number',
+      type: 'integer',
       unit: 'percent',
-      label: 'Battery',
+      title: 'Battery',
       readOnly: true,
     }
   );
@@ -139,7 +146,7 @@ function run_server(thingy) {
     {
       '@type': 'ColorProperty',
       type: 'string',
-      label: 'LED Color',
+      title: 'LED Color',
     }
   );
   thing.addProperty(ledColorProperty);
@@ -151,7 +158,7 @@ function run_server(thingy) {
     {
       '@type': 'ColorProperty',
       type: 'string',
-      label: 'Sensed Color',
+      title: 'Sensed Color',
       readOnly: true,
     }
   );
@@ -164,7 +171,7 @@ function run_server(thingy) {
     {
       '@type': 'PushedProperty',
       type: 'boolean',
-      label: 'Button',
+      title: 'Button',
     }
   );
   thing.addProperty(buttonProperty);
@@ -191,11 +198,11 @@ function run_server(thingy) {
       pressureProperty.value.notifyOfExternalUpdate(value);
     });
     thingy.on('humidityNotif', (value) => {
-      humidityProperty.value.notifyOfExternalUpdate(value);
+      humidityProperty.value.notifyOfExternalUpdate(parseInt(value));
     });
     thingy.on('gasNotif', (value) => {
-      eco2Property.value.notifyOfExternalUpdate(value.eco2);
-      tvocProperty.value.notifyOfExternalUpdate(value.tvoc);
+      eco2Property.value.notifyOfExternalUpdate(parseInt(value.eco2));
+      tvocProperty.value.notifyOfExternalUpdate(parseInt(value.tvoc));
     });
     thingy.on('colorNotif', (value) => {
       // eslint-disable-next-line max-len
@@ -223,10 +230,10 @@ function run_server(thingy) {
       });
 
       sensorColorProperty.value.notifyOfExternalUpdate(color.hex());
-      luminosityProperty.value.notifyOfExternalUpdate(value.clear);
+      luminosityProperty.value.notifyOfExternalUpdate(parseInt(value.clear));
     });
     thingy.on('batteryLevelChange', (value) => {
-      batteryLevelProperty.value.notifyOfExternalUpdate(value);
+      batteryLevelProperty.value.notifyOfExternalUpdate(parseInt(value));
     });
     thingy.on('buttonNotif', (state) => {
       buttonProperty.value.notifyOfExternalUpdate(state === 'Pressed');
